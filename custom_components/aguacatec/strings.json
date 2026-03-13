@@ -1,0 +1,27 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configurar Aguacatec",
+        "description": "Esta integración te da tus beneficios y números de sorteo de la comunidad Aguacatec. Por favor, ingresa tu nombre de usuario de Telegram (el que viene con @).",
+        "data": {
+          "id_aguacatec": "ID de Aguacatec",
+          "user_telegram": "Usuario de Telegram"
+        }
+      },
+      "reconfigure": {
+        "title": "Reconfigurar Aguacatec",
+        "description": "Actualiza tu ID de Aguacatec (Google Sheet ID).",
+        "data": {
+          "id_aguacatec": "ID de Aguacatec"
+        }
+      }
+    },
+    "error": {
+      "invalid_id": "El ID no puede estar vacío."
+    },
+    "abort": {
+      "reconfigure_successful": "Reconfiguración completada correctamente."
+    }
+  }
+}
