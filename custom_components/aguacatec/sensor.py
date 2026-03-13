@@ -124,7 +124,7 @@ class AguacatecCoordinator(DataUpdateCoordinator):
                         break
 
         # Números de sorteo
-        texto = await self._fetch_with_retry(f"{base_url}&gid=809535125")
+        texto = await self._fetch_with_retry(f"{base_url}&gid=1161907572")
         if texto:
             numeros = []
             reader = csv.reader(texto.splitlines())
@@ -136,7 +136,7 @@ class AguacatecCoordinator(DataUpdateCoordinator):
                 resultado["Numeros Sorteo"] = numeros
 
         # Datos del sorteo
-        texto = await self._fetch_with_retry(f"{base_url}&gid=992544740")
+        texto = await self._fetch_with_retry(f"{base_url}&gid=1592020214")
         if texto:
             reader = csv.reader(texto.splitlines())
             next(reader, None)
