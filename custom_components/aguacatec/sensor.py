@@ -15,6 +15,8 @@ _LOGGER = logging.getLogger(__name__)
 
 CACHE_DURATION = timedelta(minutes=10)
 
+DEFAULT_ICON = "mdi:information-outline"
+
 CAMPOS_SENSORES = {
     "Categoría":             {"nombre": "Categoría",           "icono": "mdi:egg-outline"},
     "Suscripción":           {"nombre": "Suscripción",         "icono": "mdi:calendar-sync"},
@@ -28,6 +30,8 @@ CAMPOS_SENSORES = {
     "Fecha próximo sorteo":  {"nombre": "Fecha Próximo Sorteo","icono": "mdi:calendar"},
     "Nº premiado":           {"nombre": "Número Premiado",     "icono": "mdi:trophy"},
     "Ganador":               {"nombre": "Ultimo Ganador",      "icono": "mdi:party-popper"},
+    "Próximo pago":          {"nombre": "Próximo Pago",        "icono": "mdi:calendar-clock"},
+    "Último pago":           {"nombre": "Último Pago",         "icono": "mdi:calendar-check"},
 }
 
 
@@ -51,11 +55,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
     sensores = []
     datos = coordinator.data or {}
 
-    for clave, info in CAMPOS_SENSORES.items():
-        if clave in datos:
-            sensores.append(
-                AguacatecSensor(coordinator, clave, config["user_telegram"], info["icono"], device_info)
-            )
+    for clave in datos:
+        icono = CAMPOS_SENSORES.get(clave, {}).get("icono", DEFAULT_ICON)
+        sensores.append(
+            AguacatecSensor(coordinator, clave, config["user_telegram"], icono, device_info)
+        )
 
     if not sensores:
         sensores.append(
@@ -130,7 +134,7 @@ class AguacatecCoordinator(DataUpdateCoordinator):
             reader = csv.reader(texto.splitlines())
             next(reader, None)
             for row in reader:
-                if len(row) >= 2 and self._usuario in row[1]:
+                if len(row) >= 2 and row[1] == self._usuario:
                     numeros.append(row[0])
             if numeros:
                 resultado["Numeros Sorteo"] = numeros
@@ -141,7 +145,7 @@ class AguacatecCoordinator(DataUpdateCoordinator):
             reader = csv.reader(texto.splitlines())
             next(reader, None)
             for row in reader:
-                if len(row) >= 2 and row[0].strip() in CAMPOS_SENSORES:
+                if len(row) >= 2 and row[0].strip():
                     resultado[row[0].strip()] = row[1].strip() or "Vacío"
 
         if not resultado:
